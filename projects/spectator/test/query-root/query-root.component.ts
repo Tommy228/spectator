@@ -1,4 +1,4 @@
-import { Overlay, OverlayModule } from '@angular/cdk/overlay';
+import { Overlay, OverlayModule, OverlayRef } from '@angular/cdk/overlay';
 import { ComponentPortal } from '@angular/cdk/portal';
 import { Component } from '@angular/core';
 
@@ -46,10 +46,18 @@ import { Component } from '@angular/core';
 export class QueryRootComponent {
   public constructor(private overlay: Overlay) {}
 
+  private overlayRef?: OverlayRef;
+
   public openOverlay(): void {
     const componentPortal = new ComponentPortal(QueryRootOverlayComponent);
-    const overlayRef = this.overlay.create();
-    overlayRef.attach(componentPortal);
+    this.overlayRef = this.overlay.create({
+      disposeOnNavigation: true
+    });
+    this.overlayRef.attach(componentPortal);
+  }
+
+  public closeOverlay(): void {
+    this.overlayRef?.dispose();
   }
 }
 
